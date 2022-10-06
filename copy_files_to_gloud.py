@@ -8,7 +8,7 @@ default_dag_args = {
 }
 
 with DAG(
-        dag_id="sales_upload",
+        dag_id="sales_uploadv35",
         schedule_interval="@daily",
         start_date=datetime(2022, 8, 1),
         end_date=datetime(2022, 8, 2),
@@ -19,7 +19,7 @@ with DAG(
     gcp_operator = LocalFilesystemToGCSOperator(
         task_id='gcp_task',
         src='./dags/sales/{{ds}}/*',
-        dst='src1/sales/v1/year={{ds_nodash[:4]}}/month={{ds_nodash[4:6]}}/day={{ds_nodash[6:8]}}/',
+        dst="src1/sales/v1/year={{ execution_date.year }}/month={{ '{:02}'.format(execution_date.month) }}/day={{ '{:02}'.format(execution_date.day) }}/",
         bucket='lect_10_ob',
         gcp_conn_id='google_cloud_default',
         mime_type='Folder',
